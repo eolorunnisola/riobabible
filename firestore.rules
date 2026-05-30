@@ -1,0 +1,111 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isRegisteredUser() {
+      return isSignedIn();
+    }
+
+    function isReasonableString(value, maxLen) {
+      return value is string && value.size() > 0 && value.size() <= maxLen;
+    }
+
+    // Validates users/{uid}/app/data — must match UserAppData from the app.
+    function isValidAppData() {
+      let data = request.resource.data;
+
+      return data.keys().hasAll([
+          'preferences',
+          'profile',
+          'conversations',
+          'activeConversationId',
+          'guidanceById',
+          'reflections',
+          'updatedAt',
+        ])
+        && data.keys().hasOnly([
+          'preferences',
+          'profile',
+          'conversations',
+          'activeConversationId',
+          'guidanceById',
+          'reflections',
+          'journalEntries',
+          'weeklyFaithReflections',
+          'devotionalProgress',
+          'updatedAt',
+        ])
+        && data.updatedAt is int
+        && data.updatedAt > 0
+        && isReasonableString(data.activeConversationId, 128)
+        && data.conversations is list
+        && data.conversations.size() <= 200
+        && data.reflections is list
+        && data.reflections.size() <= 500
+        && (
+          !('journalEntries' in data)
+          || (data.journalEntries is list && data.journalEntries.size() <= 500)
+        )
+        && (
+          !('weeklyFaithReflections' in data)
+          || (data.weeklyFaithReflections is map && data.weeklyFaithReflections.size() <= 200)
+        )
+        && (
+          !('devotionalProgress' in data)
+          || (data.devotionalProgress is map && data.devotionalProgress.size() <= 100)
+        )
+        && data.guidanceById is map
+        && data.guidanceById.size() <= 500
+        && data.profile is map
+        && data.profile.keys().hasAll(['displayName', 'avatarUri', 'joinedAt'])
+        && data.profile.displayName is string
+        && data.profile.displayName.size() <= 120
+        && (
+          data.profile.avatarUri == null
+          || (data.profile.avatarUri is string && data.profile.avatarUri.size() <= 2048)
+        )
+        && data.profile.joinedAt is int
+        && data.preferences is map
+        && data.preferences.keys().hasAll([
+          'translation',
+          'tone',
+          'prayerPreference',
+          'autoIncludePrayer',
+          'onboardingComplete',
+        ])
+        && data.preferences.translation in ['NIV', 'ESV', 'KJV', 'NLT']
+        && data.preferences.tone in ['gentle', 'direct', 'encouraging', 'contemplative']
+        && data.preferences.prayerPreference in ['short', 'detailed', 'scripture-focused', 'minimal']
+        && data.preferences.autoIncludePrayer is bool
+        && data.preferences.onboardingComplete is bool
+        && (
+          !('colorTheme' in data.preferences)
+          || data.preferences.colorTheme in ['sage', 'evergreen', 'harvest', 'twilight', 'bloom']
+        );
+    }
+
+    match /users/{userId}/app/data {
+      allow read: if isOwner(userId) && isRegisteredUser();
+      allow create: if isOwner(userId) && isRegisteredUser() && isValidAppData();
+      allow update: if isOwner(userId) && isRegisteredUser() && isValidAppData();
+      allow delete: if isOwner(userId) && isRegisteredUser();
+    }
+
+    match /users/{userId}/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
