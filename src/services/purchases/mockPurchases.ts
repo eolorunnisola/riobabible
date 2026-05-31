@@ -6,7 +6,7 @@ import type { PurchaseEntitlement, PurchaseOfferings, PurchasePackage } from './
 const ENTITLEMENT_KEY = 'bibleadvice.subscription.mockEntitlement';
 
 export const MOCK_MONTHLY_PACKAGE: PurchasePackage = {
-  identifier: 'bibleadvice_premium_monthly',
+  identifier: 'rioba_premium_monthly',
   title: 'Rioba Premium',
   priceString: '$4.99/month',
   billingPeriod: 'monthly',

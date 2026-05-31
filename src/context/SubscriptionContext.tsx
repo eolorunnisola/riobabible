@@ -52,7 +52,6 @@ export const PREMIUM_FEATURES: { icon: string; title: string; description: strin
   },
 ];
 
-const DEV_OVERRIDE_KEY = 'bibleadvice.subscription.tierOverride';
 const TRIAL_ENDS_KEY = 'bibleadvice.subscription.trialEndsAt';
 const CHAT_USAGE_KEY = 'bibleadvice.subscription.chatUsage';
 
@@ -73,9 +72,6 @@ type SubscriptionContextValue = {
   freeTierLimits: typeof FREE_TIER_LIMITS;
   trialDays: number;
   monthlyPackage: PurchasePackage | null;
-  /** Dev-only persisted override; never affects release builds. */
-  setTier: (tier: SubscriptionTier) => void;
-  toggleTier: () => void;
   startTrial: () => Promise<void>;
   purchasePremium: () => Promise<boolean>;
   restore: () => Promise<boolean>;
@@ -92,7 +88,6 @@ function daysLeft(endsAt: number): number {
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
   const purchaseService = useRef(createPurchaseService()).current;
   const [ready, setReady] = useState(false);
-  const [devTierOverride, setDevTierOverride] = useState<SubscriptionTier | null>(null);
   const [realEntitlement, setRealEntitlement] = useState<PurchaseEntitlement>({
     isPremium: false,
     isTrial: false,
@@ -113,18 +108,13 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     let cancelled = false;
 
     (async () => {
-      const [overrideRaw, trialRaw, usageRaw, offerings] = await Promise.all([
-        __DEV__ ? AsyncStorage.getItem(DEV_OVERRIDE_KEY) : Promise.resolve(null),
+      const [trialRaw, usageRaw, offerings] = await Promise.all([
         AsyncStorage.getItem(TRIAL_ENDS_KEY),
         AsyncStorage.getItem(CHAT_USAGE_KEY),
         purchaseService.getOfferings(),
       ]);
 
       if (cancelled) return;
-
-      if (__DEV__ && (overrideRaw === 'premium' || overrideRaw === 'free')) {
-        setDevTierOverride(overrideRaw);
-      }
 
       if (trialRaw) {
         const ends = Number(trialRaw);
@@ -168,35 +158,16 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   }, [realEntitlement, trialEndsAt]);
 
   const isPremium = useMemo(() => {
-    if (__DEV__ && devTierOverride !== null) {
-      return devTierOverride === 'premium';
-    }
     if (realEntitlement.isPremium) return true;
     if (trialActive) return true;
     return false;
-  }, [realEntitlement.isPremium, trialActive, devTierOverride]);
+  }, [realEntitlement.isPremium, trialActive]);
 
   const tier: SubscriptionTier = isPremium ? 'premium' : 'free';
 
   const chatsUsedToday = chatUsage.date === getLocalDateKey() ? chatUsage.count : 0;
   const remainingChats = Math.max(0, FREE_TIER_LIMITS.dailyChatLimit - chatsUsedToday);
   const chatLimitReached = !isPremium && chatsUsedToday >= FREE_TIER_LIMITS.dailyChatLimit;
-
-  const setTier = useCallback((next: SubscriptionTier) => {
-    if (!__DEV__) return;
-    setDevTierOverride(next);
-    void AsyncStorage.setItem(DEV_OVERRIDE_KEY, next);
-  }, []);
-
-  const toggleTier = useCallback(() => {
-    if (!__DEV__) return;
-    setDevTierOverride((prev) => {
-      const current = prev ?? 'free';
-      const next: SubscriptionTier = current === 'free' ? 'premium' : 'free';
-      void AsyncStorage.setItem(DEV_OVERRIDE_KEY, next);
-      return next;
-    });
-  }, []);
 
   const startTrial = useCallback(async () => {
     const ends = Date.now() + PREMIUM_TRIAL_DAYS * 86_400_000;
@@ -254,8 +225,6 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       freeTierLimits: FREE_TIER_LIMITS,
       trialDays: PREMIUM_TRIAL_DAYS,
       monthlyPackage,
-      setTier,
-      toggleTier,
       startTrial,
       purchasePremium,
       restore,
@@ -273,8 +242,6 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       remainingChats,
       chatLimitReached,
       monthlyPackage,
-      setTier,
-      toggleTier,
       startTrial,
       purchasePremium,
       restore,

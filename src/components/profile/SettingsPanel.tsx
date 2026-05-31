@@ -52,7 +52,7 @@ type Props = {
 export function SettingsPanel({ onClose }: Props) {
   const { preferences, updatePreferences } = useApp();
   const { user, firebaseRequired, signOut, deleteAccount, changePassword } = useAuth();
-  const { isPremium, trialActive, daysLeftInTrial, setTier } = useSubscription();
+  const { isPremium, trialActive, daysLeftInTrial } = useSubscription();
 
   const planSummary = trialActive
     ? `Trial · ${daysLeftInTrial} day${daysLeftInTrial === 1 ? '' : 's'} left`
@@ -397,42 +397,6 @@ export function SettingsPanel({ onClose }: Props) {
         </View>
       </Animated.View>
 
-      {__DEV__ ? (
-        <Animated.View
-          entering={FadeInDown.delay(310)}
-          style={[
-            styles.row,
-            {
-              marginTop: spacing.xl,
-              paddingTop: spacing.lg,
-              borderTopWidth: StyleSheet.hairlineWidth,
-              borderTopColor: colors.borderSubtle,
-            },
-          ]}
-        >
-          <View style={{ flex: 1, paddingRight: spacing.md }}>
-            <View style={styles.testRow}>
-              <Ionicons
-                name={isPremium ? 'star' : 'star-outline'}
-                size={16}
-                color={isPremium ? colors.primary : colors.textMuted}
-              />
-              <ProfileText variant="h3" style={{ marginLeft: spacing.xs }}>
-                Developer preview (free vs Premium)
-              </ProfileText>
-            </View>
-            <ProfileText variant="caption" tone="secondary" style={{ marginTop: spacing.xxs }}>
-              Preview the {isPremium ? 'Premium' : 'free'} experience without a purchase. Not included
-              in production builds.
-            </ProfileText>
-          </View>
-          <AnimatedSwitch
-            value={isPremium}
-            onValueChange={(on) => setTier(on ? 'premium' : 'free')}
-          />
-        </Animated.View>
-      ) : null}
-
       {firebaseRequired && user ? (
         <Animated.View
           entering={FadeInDown.delay(320)}
@@ -553,7 +517,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   row: { flexDirection: 'row', alignItems: 'center' },
-  testRow: { flexDirection: 'row', alignItems: 'center' },
   linkRow: { flexDirection: 'row', alignItems: 'center' },
   saveBtn: {
     paddingVertical: 14,
