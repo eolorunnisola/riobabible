@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import {
@@ -8,11 +8,13 @@ import {
   InfoSection,
 } from '@/src/components/profile/InfoScreen';
 import { LegalLinks } from '@/src/components/subscription/LegalLinks';
+import { PlanTierCard } from '@/src/components/subscription/PlanTierCard';
 import { ProfileText } from '@/src/components/profile/ProfileText';
+import { FREE_TIER_LIMITS } from '@/src/constants/subscription';
 import { useSubscription } from '@/src/context/SubscriptionContext';
 import { useProfileTheme } from '@/src/context/ProfileThemeContext';
 import { useToast } from '@/src/context/ToastContext';
-import { openManageSubscriptions } from '@/src/utils/subscriptionLinks';
+import { openManageSubscriptions, SUBSCRIPTION_PRICE_LABEL } from '@/src/utils/subscriptionLinks';
 
 export default function ManagePlanScreen() {
   const { colors, spacing, radius } = useProfileTheme();
@@ -23,14 +25,13 @@ export default function ManagePlanScreen() {
     daysLeftInTrial,
     restore,
     realEntitlement,
+    monthlyPackage,
+    trialDays,
   } = useSubscription();
   const [restoring, setRestoring] = useState(false);
 
-  const planLabel = trialActive
-    ? `Premium trial · ${daysLeftInTrial} day${daysLeftInTrial === 1 ? '' : 's'} left`
-    : isPremium
-      ? 'Premium'
-      : 'Free';
+  const priceLabel = monthlyPackage?.priceString ?? SUBSCRIPTION_PRICE_LABEL;
+  const onFreePlan = !isPremium;
 
   const handleRestore = async () => {
     setRestoring(true);
@@ -47,56 +48,82 @@ export default function ManagePlanScreen() {
 
   return (
     <InfoScreen title="Your plan" subtitle="Manage your Rioba subscription.">
-      <InfoSection title="Current plan">
-        <View
-          style={[
-            styles.planCard,
-            {
-              padding: spacing.md,
-              borderRadius: radius.lg,
-              backgroundColor: colors.surface,
-              borderColor: isPremium ? colors.primary : colors.border,
-            },
-          ]}
+      <InfoSection title="Compare plans">
+        <PlanTierCard
+          title="Free"
+          subtitle="Always available — no credit card required"
+          active={onFreePlan}
+          badge={onFreePlan ? 'Current plan' : undefined}
         >
-          <ProfileText variant="h2">{planLabel}</ProfileText>
-          {!isPremium ? (
-            <ProfileText variant="bodySmall" tone="secondary" style={{ marginTop: spacing.xs }}>
-              3 guidance chats per day · 7 days of journal history
-            </ProfileText>
-          ) : realEntitlement.productId ? (
-            <ProfileText variant="caption" tone="muted" style={{ marginTop: spacing.xs }}>
-              {realEntitlement.productId}
-            </ProfileText>
-          ) : null}
-        </View>
+          <ProfileText variant="bodySmall" tone="secondary" style={{ marginTop: spacing.sm, lineHeight: 22 }}>
+            {FREE_TIER_LIMITS.dailyChatLimit} guidance chats per day ·{' '}
+            {FREE_TIER_LIMITS.journalHistoryDays} days of journal history · save up to{' '}
+            {FREE_TIER_LIMITS.savedReflectionsLimit} reflections
+          </ProfileText>
+        </PlanTierCard>
+
+        <PlanTierCard
+          title="Premium"
+          subtitle={`${priceLabel} after ${trialDays}-day free trial`}
+          active={!onFreePlan}
+          recommended={onFreePlan}
+          badge={
+            trialActive
+              ? `Trial · ${daysLeftInTrial}d left`
+              : !onFreePlan
+                ? 'Current plan'
+                : undefined
+          }
+        >
+          <ProfileText variant="bodySmall" tone="secondary" style={{ marginTop: spacing.sm, lineHeight: 22 }}>
+            Unlimited guidance · full journal history · devotional plans · weekly reflections ·
+            all color themes
+          </ProfileText>
+        </PlanTierCard>
       </InfoSection>
 
-      {!isPremium ? (
-        <Pressable
-          onPress={() => router.push('/profile/paywall')}
-          style={({ pressed }) => [
-            styles.primaryBtn,
-            {
-              backgroundColor: colors.primary,
-              borderRadius: radius.lg,
-              opacity: pressed ? 0.88 : 1,
-            },
-          ]}
-        >
-          <ProfileText variant="button" style={{ color: '#12100E', textAlign: 'center' }}>
-            Upgrade to Premium
+      {onFreePlan ? (
+        <>
+          <Pressable
+            onPress={() => router.push('/profile/paywall')}
+            style={({ pressed }) => [
+              styles.primaryBtn,
+              {
+                backgroundColor: colors.primary,
+                borderRadius: radius.lg,
+                opacity: pressed ? 0.88 : 1,
+              },
+            ]}
+          >
+            <ProfileText variant="button" style={{ color: '#12100E', textAlign: 'center' }}>
+              Upgrade to Premium
+            </ProfileText>
+          </Pressable>
+          <ProfileText
+            variant="caption"
+            tone="muted"
+            style={{ marginTop: spacing.sm, textAlign: 'center' }}
+          >
+            {priceLabel} after {trialDays}-day free trial · auto-renews monthly
           </ProfileText>
-        </Pressable>
-      ) : null}
-
-      {isPremium ? (
+        </>
+      ) : (
         <InfoSection title="Subscription">
           <InfoParagraph>
             Change or cancel your plan in your Apple ID or Google Play subscription settings.
           </InfoParagraph>
+          {realEntitlement.productId ? (
+            <ProfileText variant="caption" tone="muted" style={{ marginBottom: spacing.sm }}>
+              Product: {realEntitlement.productId}
+            </ProfileText>
+          ) : null}
           <Pressable
-            onPress={openManageSubscriptions}
+            onPress={async () => {
+              const opened = await openManageSubscriptions();
+              if (!opened) {
+                showToast('Open the App Store on your device to manage your subscription.');
+              }
+            }}
             style={({ pressed }) => [
               styles.secondaryBtn,
               {
@@ -111,7 +138,7 @@ export default function ManagePlanScreen() {
             </ProfileText>
           </Pressable>
         </InfoSection>
-      ) : null}
+      )}
 
       <Pressable
         onPress={handleRestore}
@@ -141,7 +168,6 @@ export default function ManagePlanScreen() {
 }
 
 const styles = StyleSheet.create({
-  planCard: { borderWidth: 1.5 },
   primaryBtn: { paddingVertical: 14, alignItems: 'center' },
   secondaryBtn: {
     paddingVertical: 14,

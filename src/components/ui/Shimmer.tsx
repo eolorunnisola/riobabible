@@ -1,12 +1,12 @@
+import { useTheme } from '@/src/context/ThemeContext';
 import { useEffect } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withTiming,
 } from 'react-native-reanimated';
-import { useTheme } from '@/src/context/ThemeContext';
 
 type Props = {
   width: number | `${number}%`;

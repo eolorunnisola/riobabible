@@ -40,12 +40,12 @@ Product id used by the app: **`rioba_premium_monthly`** with a **7-day free tria
 (see `src/constants/subscription.ts`). Use the same id in both stores for sanity.
 
 **App Store Connect** → your app → Subscriptions:
-- [ ] Create a Subscription Group, then an auto-renewable subscription `rioba_premium_monthly`, $4.99/month.
+- [ ] Create a Subscription Group, then an auto-renewable subscription `rioba_premium_monthly`, $6.99/month.
 - [ ] Add an **Introductory Offer**: 7-day free trial.
 - [ ] Fill localization, review screenshot, and the "Cleared for Sale" / paid agreements (App Store Connect → Agreements, Tax, and Banking — **payments won't work until the Paid Apps agreement is active**).
 
 **Google Play Console** → your app → Monetize → Subscriptions:
-- [ ] Create subscription `rioba_premium_monthly` with a monthly base plan, $4.99.
+- [ ] Create subscription `rioba_premium_monthly` with a monthly base plan, $6.99.
 - [ ] Add a **free trial** offer (7 days) on the base plan.
 - [ ] Set up a merchant/payments profile.
 

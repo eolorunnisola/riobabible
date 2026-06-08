@@ -1,8 +1,8 @@
-import { router } from 'expo-router';
 import { OnboardingShell } from '@/src/components/onboarding/OnboardingShell';
 import { SelectionChip } from '@/src/components/onboarding/SelectionChip';
 import { useApp } from '@/src/context/AppContext';
 import { BibleTranslation } from '@/src/types';
+import { router } from 'expo-router';
 
 const OPTIONS: { value: BibleTranslation; label: string; description: string }[] = [
   { value: 'NIV', label: 'NIV', description: 'New International Version — clear and widely used' },

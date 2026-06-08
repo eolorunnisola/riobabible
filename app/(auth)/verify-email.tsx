@@ -52,7 +52,7 @@ export default function VerifyEmailScreen() {
         showToast('Email verified');
         router.replace('/');
       } else {
-        showToast('Not verified yet — tap the link in your email.');
+        showToast('Not verified yet — check spam and tap the link in your email.');
       }
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Could not check status.');
@@ -65,7 +65,7 @@ export default function VerifyEmailScreen() {
     setResending(true);
     try {
       await resendVerification();
-      showToast('Verification email sent');
+      showToast('Verification email sent — check spam if you don\'t see it.');
       startCooldown();
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Could not send email.');
@@ -121,7 +121,26 @@ export default function VerifyEmailScreen() {
           <Text variant="body" style={{ fontWeight: '700', color: colors.primary }}>
             {user?.email ?? 'your email'}
           </Text>
-          .{'\n'}Tap it, then come back and continue.
+          .
+        </Text>
+        <Text
+          variant="h3"
+          style={{
+            marginTop: spacing.md,
+            textAlign: 'center',
+            lineHeight: 26,
+            color: colors.warning,
+            fontWeight: '800',
+          }}
+        >
+          Check your spam folder — our emails often land there.
+        </Text>
+        <Text
+          variant="bodySmall"
+          color="secondary"
+          style={{ marginTop: spacing.sm, textAlign: 'center', lineHeight: 20 }}
+        >
+          Tap the link in the email, then continue below.
         </Text>
 
         <Button

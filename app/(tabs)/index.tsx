@@ -1,39 +1,39 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
-import * as Haptics from 'expo-haptics';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { FlashList, FlashListRef } from '@shopify/flash-list';
-import { router } from 'expo-router';
+import { ChatBubble } from '@/src/components/chat/ChatBubble';
+import { ChatHistorySheet } from '@/src/components/chat/ChatHistorySheet';
+import { ChatInputBar } from '@/src/components/chat/ChatInputBar';
 import { ChatInputDock } from '@/src/components/chat/ChatInputDock';
-import { useKeyboardState } from 'react-native-keyboard-controller';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { Ionicons } from '@expo/vector-icons';
+import { NewConversationBanner } from '@/src/components/chat/NewConversationBanner';
+import { TypingIndicator } from '@/src/components/chat/TypingIndicator';
+import { UpgradePrompt } from '@/src/components/subscription/UpgradePrompt';
+import { DisclaimerBanner } from '@/src/components/ui/DisclaimerBanner';
 import { Screen } from '@/src/components/ui/Screen';
 import { Text } from '@/src/components/ui/Text';
-import { DisclaimerBanner } from '@/src/components/ui/DisclaimerBanner';
-import { ChatBubble } from '@/src/components/chat/ChatBubble';
-import { TypingIndicator } from '@/src/components/chat/TypingIndicator';
-import { ChatInputBar } from '@/src/components/chat/ChatInputBar';
-import { ChatHistorySheet } from '@/src/components/chat/ChatHistorySheet';
-import { NewConversationBanner } from '@/src/components/chat/NewConversationBanner';
 import { useApp } from '@/src/context/AppContext';
-import { useToast } from '@/src/context/ToastContext';
+import { useSubscription } from '@/src/context/SubscriptionContext';
 import { useTheme } from '@/src/context/ThemeContext';
+import { useToast } from '@/src/context/ToastContext';
 import { detectCrisisContent } from '@/src/data/mock';
-import { ChatMessage } from '@/src/types';
-import {
-  CrisisDetectedError,
-  GuidanceGenerationError,
-  generateGuidance,
-} from '@/src/services/guidance/generateGuidance';
+import { isGeminiConfigured } from '@/src/services/gemini/config';
 import { detectOffTopicContent } from '@/src/services/guidance/detectOffTopic';
 import {
-  OFF_TOPIC_ASSISTANT_MESSAGE,
-  OffTopicPromptError,
+    CrisisDetectedError,
+    GuidanceGenerationError,
+    generateGuidance,
+} from '@/src/services/guidance/generateGuidance';
+import {
+    OFF_TOPIC_ASSISTANT_MESSAGE,
+    OffTopicPromptError,
 } from '@/src/services/guidance/offTopic';
-import { isGeminiConfigured } from '@/src/services/gemini/config';
-import { UpgradePrompt } from '@/src/components/subscription/UpgradePrompt';
-import { useSubscription } from '@/src/context/SubscriptionContext';
+import { ChatMessage } from '@/src/types';
+import { Ionicons } from '@expo/vector-icons';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { FlashList, FlashListRef } from '@shopify/flash-list';
+import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { useKeyboardState } from 'react-native-keyboard-controller';
 
 function isUserMessage(item: ChatMessage) {
   return item.role === 'user';

@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import { View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '@/src/components/ui/Screen';
 import { Text } from '@/src/components/ui/Text';
 import { Button } from '@/src/components/ui/Button';
@@ -11,6 +12,7 @@ import { useTheme } from '@/src/context/ThemeContext';
 export default function OnboardingCompleteScreen() {
   const { completeOnboarding, preferences } = useApp();
   const { colors, spacing } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const finish = () => {
     completeOnboarding();
@@ -18,7 +20,15 @@ export default function OnboardingCompleteScreen() {
   };
 
   return (
-    <Screen scroll>
+    <Screen
+      scroll
+      edges={['top', 'bottom']}
+      style={{
+        paddingLeft: insets.left + spacing.xl,
+        paddingRight: insets.right + spacing.xl,
+        flexGrow: 1,
+      }}
+    >
       <Animated.View entering={FadeIn.duration(500)} style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
         <View
           style={{

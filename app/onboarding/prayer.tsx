@@ -1,8 +1,8 @@
-import { router } from 'expo-router';
 import { OnboardingShell } from '@/src/components/onboarding/OnboardingShell';
 import { SelectionChip } from '@/src/components/onboarding/SelectionChip';
 import { useApp } from '@/src/context/AppContext';
 import { PrayerPreference } from '@/src/types';
+import { router } from 'expo-router';
 
 const OPTIONS: { value: PrayerPreference; label: string; description: string }[] = [
   { value: 'short', label: 'Short prayers', description: 'Brief words you can pray quickly' },

@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/src/components/ui/Text';
 import { useTheme } from '@/src/context/ThemeContext';
 import { ChatMessage } from '@/src/types';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 type Props = {
   message: ChatMessage;

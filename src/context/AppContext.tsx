@@ -331,6 +331,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         migrated.updatedAt = legacyMessages.at(-1)?.timestamp ?? migrated.updatedAt;
         chats = [migrated];
       }
+      // Version of the data actually persisted locally for this user (0 when none).
+      // Must be measured BEFORE injecting a synthetic empty session below, whose
+      // `updatedAt` is "now" and would otherwise always beat older cloud data —
+      // causing a fresh/reinstalled device to discard cloud prefs and re-onboard.
+      const localVersion = getLocalDataVersion(chats);
+
       if (chats.length === 0) {
         chats = [createEmptySession()];
       }
@@ -371,7 +377,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         try {
           const cloud = await loadCloudAppData();
           if (cloud) {
-            const localVersion = getLocalDataVersion(chats);
             if (cloud.updatedAt > localVersion) {
               nextPrefs = { ...defaultPreferences, ...cloud.preferences };
               nextProfile = { ...defaultProfile, ...cloud.profile };

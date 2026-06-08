@@ -103,7 +103,7 @@ export async function generateGuidance(
       prayer: preferences.autoIncludePrayer ? composed.prayer : '',
       nextStep: composed.nextStep,
       journalPrompts: composed.journalPrompts ?? [],
-      disclaimer,
+      ...(disclaimer ? { disclaimer } : {}),
       category: classification.category,
       createdAt: Date.now(),
     };

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screen } from '@/src/components/ui/Screen';
 import { Text } from '@/src/components/ui/Text';
 import { Button } from '@/src/components/ui/Button';
@@ -27,11 +28,22 @@ export function OnboardingShell({
   nextLabel = 'Continue',
   canContinue = true,
 }: Props) {
+  const insets = useSafeAreaInsets();
   const { colors, spacing, radius } = useTheme();
   const progress = step / totalSteps;
+  const horizontalPad = spacing.xl;
 
   return (
-    <Screen scroll keyboard>
+    <Screen
+      scroll
+      keyboard
+      edges={['top', 'bottom']}
+      style={{
+        paddingLeft: insets.left + horizontalPad,
+        paddingRight: insets.right + horizontalPad,
+        flexGrow: 1,
+      }}
+    >
       <View style={[styles.progressTrack, { backgroundColor: colors.border, borderRadius: radius.full }]}>
         <View
           style={[
@@ -48,7 +60,7 @@ export function OnboardingShell({
         Step {step} of {totalSteps}
       </Text>
       <Animated.View entering={FadeInRight.duration(350)} exiting={FadeOutLeft.duration(250)}>
-        <Text variant="display" style={{ marginTop: spacing.lg }}>
+        <Text variant="h1" style={{ marginTop: spacing.lg }}>
           {title}
         </Text>
         {subtitle ? (
@@ -58,7 +70,7 @@ export function OnboardingShell({
         ) : null}
         <View style={{ marginTop: spacing.xl }}>{children}</View>
       </Animated.View>
-      <View style={styles.footer}>
+      <View style={{ marginTop: 'auto', paddingTop: spacing.xxl, paddingBottom: spacing.md }}>
         <Button label={nextLabel} onPress={onNext} disabled={!canContinue} fullWidth />
       </View>
     </Screen>
@@ -68,5 +80,4 @@ export function OnboardingShell({
 const styles = StyleSheet.create({
   progressTrack: { height: 4, width: '100%', overflow: 'hidden' },
   progressFill: { height: '100%' },
-  footer: { marginTop: 'auto', paddingTop: 32, paddingBottom: 16 },
 });

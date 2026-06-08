@@ -40,12 +40,41 @@ export function PlanDetailsSection() {
             marginTop: spacing.md,
             padding: spacing.md,
             borderRadius: radius.lg,
-            borderColor: colors.border,
-            backgroundColor: colors.surface,
+            borderColor: !isPremium && !trialActive ? colors.primary : colors.borderSubtle,
+            backgroundColor:
+              !isPremium && !trialActive ? colors.primary + '1A' : colors.surface + '88',
+            borderWidth: !isPremium && !trialActive ? 2 : StyleSheet.hairlineWidth,
+            opacity: !isPremium && !trialActive ? 1 : 0.72,
           },
         ]}
       >
-        <ProfileText variant="h3">Free</ProfileText>
+        <View style={styles.premiumHeader}>
+          <ProfileText
+            variant="h3"
+            style={{
+              color: !isPremium && !trialActive ? colors.primary : colors.textSecondary,
+            }}
+          >
+            Free
+          </ProfileText>
+          {!isPremium && !trialActive && (
+            <View
+              style={[
+                styles.badge,
+                {
+                  backgroundColor: colors.primary + '33',
+                  borderRadius: radius.full,
+                  paddingHorizontal: spacing.sm,
+                  paddingVertical: 2,
+                },
+              ]}
+            >
+              <ProfileText variant="caption" style={{ color: colors.primary, fontWeight: '600' }}>
+                Your plan
+              </ProfileText>
+            </View>
+          )}
+        </View>
         <ProfileText variant="caption" tone="muted" style={{ marginTop: spacing.xxs }}>
           Always available — no credit card required
         </ProfileText>
@@ -61,30 +90,65 @@ export function PlanDetailsSection() {
             marginTop: spacing.sm,
             padding: spacing.md,
             borderRadius: radius.lg,
-            borderColor: isPremium || trialActive ? colors.primary : colors.border,
-            backgroundColor: colors.surface,
+            borderColor: isPremium || trialActive ? colors.primary : colors.warning,
+            backgroundColor:
+              isPremium || trialActive
+                ? colors.primary + '1A'
+                : colors.warning + '14',
+            borderWidth: isPremium || trialActive ? 2 : 2,
+            opacity: isPremium || trialActive ? 1 : 0.92,
           },
         ]}
       >
         <View style={styles.premiumHeader}>
-          <ProfileText variant="h3">Premium</ProfileText>
-          {(isPremium || trialActive) && (
-            <View
-              style={[
-                styles.badge,
-                {
-                  backgroundColor: colors.primary + '22',
-                  borderRadius: radius.full,
-                  paddingHorizontal: spacing.sm,
-                  paddingVertical: 2,
-                },
-              ]}
-            >
-              <ProfileText variant="caption" style={{ color: colors.primary }}>
-                {trialActive ? 'Trial active' : 'Your plan'}
-              </ProfileText>
-            </View>
-          )}
+          <ProfileText
+            variant="h3"
+            style={{
+              color: isPremium || trialActive ? colors.primary : colors.textSecondary,
+            }}
+          >
+            Premium
+          </ProfileText>
+          <View style={styles.badgeRow}>
+            {!isPremium && !trialActive ? (
+              <View
+                style={[
+                  styles.badge,
+                  {
+                    backgroundColor: colors.warning + '33',
+                    borderRadius: radius.full,
+                    paddingHorizontal: spacing.sm,
+                    paddingVertical: 2,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 4,
+                  },
+                ]}
+              >
+                <Ionicons name="star" size={12} color={colors.warning} />
+                <ProfileText variant="caption" style={{ color: colors.warning, fontWeight: '700' }}>
+                  Recommended
+                </ProfileText>
+              </View>
+            ) : null}
+            {(isPremium || trialActive) && (
+              <View
+                style={[
+                  styles.badge,
+                  {
+                    backgroundColor: colors.primary + '33',
+                    borderRadius: radius.full,
+                    paddingHorizontal: spacing.sm,
+                    paddingVertical: 2,
+                  },
+                ]}
+              >
+                <ProfileText variant="caption" style={{ color: colors.primary, fontWeight: '600' }}>
+                  {trialActive ? 'Trial active' : 'Your plan'}
+                </ProfileText>
+              </View>
+            )}
+          </View>
         </View>
         <ProfileText variant="caption" tone="muted" style={{ marginTop: spacing.xxs }}>
           {PREMIUM_TRIAL_DAYS}-day free trial, then monthly subscription · cancel anytime in your device
@@ -136,7 +200,8 @@ function PlanBullet({ text }: { text: string }) {
 
 const styles = StyleSheet.create({
   card: { borderWidth: StyleSheet.hairlineWidth },
-  premiumHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
+  premiumHeader: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 },
+  badgeRow: { alignItems: 'flex-end', gap: 6 },
   badge: {},
   bulletRow: { flexDirection: 'row', alignItems: 'flex-start' },
   cta: { paddingVertical: 14, paddingHorizontal: 16 },

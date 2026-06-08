@@ -1,18 +1,18 @@
-import { useMemo } from 'react';
-import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { FlashList } from '@shopify/flash-list';
-import { Screen } from '@/src/components/ui/Screen';
-import { Text } from '@/src/components/ui/Text';
 import { ReflectionWeekFolder } from '@/src/components/reflections/ReflectionWeekFolder';
 import { ReflectionsPlanBanner } from '@/src/components/reflections/ReflectionsPlanBanner';
+import { Screen } from '@/src/components/ui/Screen';
+import { Text } from '@/src/components/ui/Text';
 import { useApp } from '@/src/context/AppContext';
 import { useSubscription } from '@/src/context/SubscriptionContext';
-import { useToast } from '@/src/context/ToastContext';
 import { useTheme } from '@/src/context/ThemeContext';
+import { useToast } from '@/src/context/ToastContext';
 import { SavedReflection } from '@/src/types';
 import { groupReflectionsByWeek } from '@/src/utils/weeklyReflection';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { FlashList } from '@shopify/flash-list';
+import { router } from 'expo-router';
+import { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 export default function ReflectionsScreen() {
   const { reflections, removeReflection, getGuidance, getWeeklyFaithReflection } = useApp();

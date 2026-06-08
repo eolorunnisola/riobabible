@@ -17,6 +17,7 @@ import {
   type PurchaseEntitlement,
   type PurchasePackage,
 } from '@/src/services/purchases';
+import { useAuth } from '@/src/context/AuthContext';
 import { getLocalDateKey } from '@/src/utils/dateKey';
 
 export type SubscriptionTier = 'free' | 'premium';
@@ -52,8 +53,18 @@ export const PREMIUM_FEATURES: { icon: string; title: string; description: strin
   },
 ];
 
-const TRIAL_ENDS_KEY = 'bibleadvice.subscription.trialEndsAt';
-const CHAT_USAGE_KEY = 'bibleadvice.subscription.chatUsage';
+// Anonymous / signed-out fallback keys (legacy). When a user is signed in these
+// are namespaced per uid so one account's trial/usage never leaks to another.
+const LEGACY_TRIAL_KEY = 'bibleadvice.subscription.trialEndsAt';
+const LEGACY_USAGE_KEY = 'bibleadvice.subscription.chatUsage';
+
+function trialKey(uid: string | null): string {
+  return uid ? `@bibleadvice/users/${uid}/subscription/trialEndsAt` : LEGACY_TRIAL_KEY;
+}
+
+function usageKey(uid: string | null): string {
+  return uid ? `@bibleadvice/users/${uid}/subscription/chatUsage` : LEGACY_USAGE_KEY;
+}
 
 type ChatUsageRecord = { date: string; count: number };
 
@@ -87,6 +98,8 @@ function daysLeft(endsAt: number): number {
 
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
   const purchaseService = useRef(createPurchaseService()).current;
+  const { user } = useAuth();
+  const uid = user?.uid ?? null;
   const [ready, setReady] = useState(false);
   const [realEntitlement, setRealEntitlement] = useState<PurchaseEntitlement>({
     isPremium: false,
@@ -107,43 +120,60 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   useEffect(() => {
     let cancelled = false;
 
+    // Account changed (sign-in / sign-out / switch). Reset any previous account's
+    // state immediately so nothing leaks across the transition, then reload.
+    setReady(false);
+    setRealEntitlement({ isPremium: false, isTrial: false });
+    setTrialEndsAt(null);
+    setChatUsage({ date: getLocalDateKey(), count: 0 });
+
     (async () => {
-      const [trialRaw, usageRaw, offerings] = await Promise.all([
-        AsyncStorage.getItem(TRIAL_ENDS_KEY),
-        AsyncStorage.getItem(CHAT_USAGE_KEY),
+      // Bind (or detach) the store SDK to this app user so entitlements are
+      // scoped per account, not per device.
+      try {
+        if (uid) await purchaseService.logIn(uid);
+        else await purchaseService.logOut();
+      } catch {
+        // Non-fatal — entitlement read below still reflects the correct user.
+      }
+
+      const [trialRaw, usageRaw, offerings, entitlement] = await Promise.all([
+        AsyncStorage.getItem(trialKey(uid)),
+        AsyncStorage.getItem(usageKey(uid)),
         purchaseService.getOfferings(),
+        purchaseService.getEntitlement(),
       ]);
 
       if (cancelled) return;
 
+      let nextTrialEnds: number | null = null;
       if (trialRaw) {
         const ends = Number(trialRaw);
-        if (!Number.isNaN(ends) && ends > Date.now()) {
-          setTrialEndsAt(ends);
-        }
+        if (!Number.isNaN(ends) && ends > Date.now()) nextTrialEnds = ends;
       }
+      // A store-reported trial expiry is the source of truth when present.
+      if (entitlement.expiresAt && entitlement.isTrial) nextTrialEnds = entitlement.expiresAt;
+      setTrialEndsAt(nextTrialEnds);
+      setRealEntitlement(entitlement);
 
       if (usageRaw) {
         try {
           const parsed = JSON.parse(usageRaw) as ChatUsageRecord;
           const today = getLocalDateKey();
-          setChatUsage(
-            parsed.date === today ? parsed : { date: today, count: 0 },
-          );
+          setChatUsage(parsed.date === today ? parsed : { date: today, count: 0 });
         } catch {
           setChatUsage({ date: getLocalDateKey(), count: 0 });
         }
       }
 
       setMonthlyPackage(offerings.packages[0] ?? null);
-      await refreshEntitlement();
       if (!cancelled) setReady(true);
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [purchaseService, refreshEntitlement]);
+  }, [uid, purchaseService]);
 
   const trialActive = useMemo(() => {
     if (realEntitlement.isTrial && realEntitlement.expiresAt && realEntitlement.expiresAt > Date.now()) {
@@ -172,8 +202,8 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const startTrial = useCallback(async () => {
     const ends = Date.now() + PREMIUM_TRIAL_DAYS * 86_400_000;
     setTrialEndsAt(ends);
-    await AsyncStorage.setItem(TRIAL_ENDS_KEY, String(ends));
-  }, []);
+    await AsyncStorage.setItem(trialKey(uid), String(ends));
+  }, [uid]);
 
   const purchasePremium = useCallback(async () => {
     const pkg = monthlyPackage ?? (await purchaseService.getOfferings()).packages[0];
@@ -183,20 +213,20 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     setRealEntitlement(entitlement);
     if (entitlement.expiresAt) {
       setTrialEndsAt(entitlement.expiresAt);
-      await AsyncStorage.setItem(TRIAL_ENDS_KEY, String(entitlement.expiresAt));
+      await AsyncStorage.setItem(trialKey(uid), String(entitlement.expiresAt));
     }
     return entitlement.isPremium;
-  }, [monthlyPackage, purchaseService]);
+  }, [monthlyPackage, purchaseService, uid]);
 
   const restore = useCallback(async () => {
     const entitlement = await purchaseService.restorePurchases();
     setRealEntitlement(entitlement);
     if (entitlement.expiresAt && entitlement.isTrial) {
       setTrialEndsAt(entitlement.expiresAt);
-      await AsyncStorage.setItem(TRIAL_ENDS_KEY, String(entitlement.expiresAt));
+      await AsyncStorage.setItem(trialKey(uid), String(entitlement.expiresAt));
     }
     return entitlement.isPremium;
-  }, [purchaseService]);
+  }, [purchaseService, uid]);
 
   const recordChatUsed = useCallback(() => {
     const today = getLocalDateKey();
@@ -205,10 +235,10 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         prev.date === today
           ? { date: today, count: prev.count + 1 }
           : { date: today, count: 1 };
-      void AsyncStorage.setItem(CHAT_USAGE_KEY, JSON.stringify(next));
+      void AsyncStorage.setItem(usageKey(uid), JSON.stringify(next));
       return next;
     });
-  }, []);
+  }, [uid]);
 
   const value = useMemo<SubscriptionContextValue>(
     () => ({

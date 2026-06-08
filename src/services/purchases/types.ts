@@ -8,7 +8,7 @@ export type PurchaseEntitlement = {
 export type PurchasePackage = {
   identifier: string;
   title: string;
-  /** Localized price label, e.g. "$4.99/month" */
+  /** Localized price label, e.g. "$6.99/month" */
   priceString: string;
   billingPeriod: 'monthly';
   /** Introductory free-trial length in days (store intro offer). */

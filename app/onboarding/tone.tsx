@@ -1,8 +1,8 @@
-import { router } from 'expo-router';
 import { OnboardingShell } from '@/src/components/onboarding/OnboardingShell';
 import { SelectionChip } from '@/src/components/onboarding/SelectionChip';
 import { useApp } from '@/src/context/AppContext';
 import { GuidanceTone } from '@/src/types';
+import { router } from 'expo-router';
 
 const OPTIONS: { value: GuidanceTone; label: string; description: string }[] = [
   { value: 'gentle', label: 'Gentle', description: 'Soft, patient, and reassuring' },

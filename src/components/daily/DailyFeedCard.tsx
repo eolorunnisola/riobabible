@@ -1,8 +1,8 @@
-import { Dimensions, StyleSheet, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/src/components/ui/Text';
 import { useTheme } from '@/src/context/ThemeContext';
 import { DailyEncouragement } from '@/src/types';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Dimensions, StyleSheet, View } from 'react-native';
 
 const { height } = Dimensions.get('window');
 

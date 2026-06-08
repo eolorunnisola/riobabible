@@ -98,7 +98,13 @@ export function createRevenueCatPurchaseService(): PurchaseService | null {
   if (__DEV__) {
     void Purchases.setLogLevel(LOG_LEVEL.DEBUG);
   }
-  Purchases.configure({ apiKey });
+
+  try {
+    Purchases.configure({ apiKey });
+  } catch (e) {
+    console.warn('[Purchases] RevenueCat configure failed; falling back to mock.', e);
+    return null;
+  }
 
   // RevenueCat needs the native package object to start a purchase; our public
   // PurchasePackage carries only the identifier, so we cache the mapping here.
@@ -145,6 +151,22 @@ export function createRevenueCatPurchaseService(): PurchaseService | null {
 
     async getEntitlement(): Promise<PurchaseEntitlement> {
       return toEntitlement(await Purchases.getCustomerInfo());
+    },
+
+    async logIn(userId: string): Promise<void> {
+      try {
+        await Purchases.logIn(userId);
+      } catch (e) {
+        console.warn('[Purchases] logIn failed', e);
+      }
+    },
+
+    async logOut(): Promise<void> {
+      try {
+        await Purchases.logOut();
+      } catch {
+        // RevenueCat throws if the current user is already anonymous — safe to ignore.
+      }
     },
   };
 }

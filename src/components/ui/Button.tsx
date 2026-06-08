@@ -1,6 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, ViewStyle } from 'react-native';
 import { Text } from './Text';
 import { useTheme } from '@/src/context/ThemeContext';
+import { hapticLight } from '@/src/utils/haptics';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
@@ -12,6 +13,8 @@ type Props = {
   loading?: boolean;
   style?: ViewStyle;
   fullWidth?: boolean;
+  /** Light impact on press (default true). */
+  haptic?: boolean;
 };
 
 export function Button({
@@ -22,6 +25,7 @@ export function Button({
   loading,
   style,
   fullWidth,
+  haptic = true,
 }: Props) {
   const { colors, radius, spacing, shadows } = useTheme();
 
@@ -39,7 +43,10 @@ export function Button({
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        if (haptic) hapticLight();
+        onPress?.();
+      }}
       disabled={disabled || loading}
       style={({ pressed }) => [
         styles.base,

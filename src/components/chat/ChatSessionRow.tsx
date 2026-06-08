@@ -4,6 +4,7 @@ import { Text } from '@/src/components/ui/Text';
 import { useTheme } from '@/src/context/ThemeContext';
 import { ChatSession } from '@/src/types';
 import { formatChatDate } from '@/src/utils/chatTitle';
+import { hapticLight, hapticSelection } from '@/src/utils/haptics';
 
 type Props = {
   session: ChatSession;
@@ -26,7 +27,10 @@ export function ChatSessionRow({ session, active, onPress, onDelete }: Props) {
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        hapticSelection();
+        onPress();
+      }}
       style={({ pressed }) => [
         styles.row,
         {
@@ -53,6 +57,7 @@ export function ChatSessionRow({ session, active, onPress, onDelete }: Props) {
         <Pressable
           onPress={(e) => {
             e.stopPropagation();
+            hapticLight();
             onDelete();
           }}
           hitSlop={10}

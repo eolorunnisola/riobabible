@@ -2,7 +2,22 @@ import { Tabs } from 'expo-router';
 import { Platform, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
+import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+import { PlatformPressable } from '@react-navigation/elements';
 import { useTheme } from '@/src/context/ThemeContext';
+import { hapticSelection } from '@/src/utils/haptics';
+
+function HapticTabBarButton(props: BottomTabBarButtonProps) {
+  return (
+    <PlatformPressable
+      {...props}
+      onPress={(e) => {
+        hapticSelection();
+        props.onPress?.(e);
+      }}
+    />
+  );
+}
 
 type TabIcon = keyof typeof Ionicons.glyphMap;
 
@@ -41,6 +56,7 @@ export default function TabLayout() {
           ) : (
             <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.tabBar }]} />
           ),
+        tabBarButton: (props) => <HapticTabBarButton {...props} />,
       }}
     >
       <Tabs.Screen

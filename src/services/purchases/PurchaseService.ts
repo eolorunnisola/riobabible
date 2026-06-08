@@ -9,4 +9,11 @@ export interface PurchaseService {
   purchasePackage(pkg: PurchasePackage): Promise<PurchaseEntitlement>;
   restorePurchases(): Promise<PurchaseEntitlement>;
   getEntitlement(): Promise<PurchaseEntitlement>;
+  /**
+   * Associate the store SDK with the signed-in app user so entitlements are
+   * scoped per account (not per device). Call on sign-in.
+   */
+  logIn(userId: string): Promise<void>;
+  /** Detach the previous user on sign-out so their entitlement doesn't leak. */
+  logOut(): Promise<void>;
 }

@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text } from '@/src/components/ui/Text';
 import { useTheme } from '@/src/context/ThemeContext';
+import { hapticSelection } from '@/src/utils/haptics';
 
 type Props = {
   label: string;
@@ -14,15 +15,19 @@ export function SelectionChip({ label, description, selected, onPress }: Props) 
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        hapticSelection();
+        onPress();
+      }}
       style={({ pressed }) => [
         styles.chip,
         {
           backgroundColor: selected ? colors.primary + '22' : colors.surface,
           borderColor: selected ? colors.primary : colors.border,
           borderRadius: radius.lg,
-          padding: spacing.md,
-          marginBottom: spacing.sm,
+          paddingVertical: spacing.md,
+          paddingHorizontal: spacing.lg,
+          marginBottom: spacing.md,
           opacity: pressed ? 0.9 : 1,
         },
         shadows.soft,

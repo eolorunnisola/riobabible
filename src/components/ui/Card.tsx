@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View, ViewProps } from 'react-native';
 import { useTheme } from '@/src/context/ThemeContext';
+import { hapticLight } from '@/src/utils/haptics';
 
 type Props = ViewProps & {
   onPress?: () => void;
@@ -29,7 +30,13 @@ export function Card({ children, style, onPress, elevated = true, ...props }: Pr
 
   if (onPress) {
     return (
-      <Pressable onPress={onPress} style={({ pressed }) => [{ opacity: pressed ? 0.92 : 1 }]}>
+      <Pressable
+        onPress={() => {
+          hapticLight();
+          onPress();
+        }}
+        style={({ pressed }) => [{ opacity: pressed ? 0.92 : 1 }]}
+      >
         {inner}
       </Pressable>
     );

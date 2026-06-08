@@ -1,13 +1,13 @@
-import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import { AppLogo } from '@/src/components/ui/AppLogo';
+import { Button } from '@/src/components/ui/Button';
+import { DisclaimerBanner } from '@/src/components/ui/DisclaimerBanner';
 import { Screen } from '@/src/components/ui/Screen';
 import { Text } from '@/src/components/ui/Text';
-import { Button } from '@/src/components/ui/Button';
-import { AppLogo } from '@/src/components/ui/AppLogo';
-import { DisclaimerBanner } from '@/src/components/ui/DisclaimerBanner';
 import { useTheme } from '@/src/context/ThemeContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 export default function WelcomeScreen() {
   const { spacing, colors } = useTheme();
 

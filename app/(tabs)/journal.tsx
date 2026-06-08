@@ -1,20 +1,20 @@
-import { router } from 'expo-router';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { FlashList } from '@shopify/flash-list';
-import { Ionicons } from '@expo/vector-icons';
-import { Screen } from '@/src/components/ui/Screen';
-import { Text } from '@/src/components/ui/Text';
-import { ConfirmDialog } from '@/src/components/ui/ConfirmDialog';
 import { JournalEntryCard } from '@/src/components/journal/JournalEntryCard';
 import { JournalLockedBanner } from '@/src/components/journal/JournalLockedBanner';
+import { ConfirmDialog } from '@/src/components/ui/ConfirmDialog';
+import { Screen } from '@/src/components/ui/Screen';
+import { Text } from '@/src/components/ui/Text';
+import { FREE_TIER_LIMITS } from '@/src/constants/subscription';
 import { useApp } from '@/src/context/AppContext';
 import { useSubscription } from '@/src/context/SubscriptionContext';
-import { useToast } from '@/src/context/ToastContext';
 import { useTheme } from '@/src/context/ThemeContext';
-import { FREE_TIER_LIMITS } from '@/src/constants/subscription';
+import { useToast } from '@/src/context/ToastContext';
 import { JournalEntry } from '@/src/types';
+import { Ionicons } from '@expo/vector-icons';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { FlashList } from '@shopify/flash-list';
+import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 export default function JournalScreen() {
   const { journalEntries, deleteJournalEntry } = useApp();

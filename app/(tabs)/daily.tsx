@@ -1,22 +1,22 @@
-import { useCallback, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  Dimensions,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { DailyFeedCard, DailySlideKind } from '@/src/components/daily/DailyFeedCard';
 import { Screen } from '@/src/components/ui/Screen';
 import { Text } from '@/src/components/ui/Text';
-import { DailyFeedCard, DailySlideKind } from '@/src/components/daily/DailyFeedCard';
 import { useApp } from '@/src/context/AppContext';
-import { getDailyEncouragement } from '@/src/services/daily/getDailyEncouragement';
 import { useTheme } from '@/src/context/ThemeContext';
+import { getDailyEncouragement } from '@/src/services/daily/getDailyEncouragement';
 import { DailyEncouragement } from '@/src/types';
 import { getLocalDateKey } from '@/src/utils/dateKey';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useMemo, useState } from 'react';
+import {
+    ActivityIndicator,
+    Dimensions,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native';
 
 const { width } = Dimensions.get('window');
 

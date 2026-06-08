@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import * as Haptics from 'expo-haptics';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   interpolateColor,
@@ -8,6 +7,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { useProfileTheme } from '@/src/context/ProfileThemeContext';
+import { hapticSelection } from '@/src/utils/haptics';
 
 type Props = {
   value: boolean;
@@ -31,7 +31,7 @@ export function AnimatedSwitch({ value, onValueChange, disabled }: Props) {
     if (disabled) return;
     const next = !value;
     progress.value = withSpring(next ? 1 : 0, { damping: 18, stiffness: 220 });
-    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    hapticSelection();
     onValueChange(next);
   };
 

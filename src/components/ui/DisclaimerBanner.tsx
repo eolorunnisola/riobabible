@@ -3,6 +3,7 @@ import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from './Text';
 import { useTheme } from '@/src/context/ThemeContext';
+import { hapticSelection } from '@/src/utils/haptics';
 
 const COMPACT_MESSAGE =
   'Spiritual encouragement only — not professional counseling or medical advice.';
@@ -23,7 +24,10 @@ export function DisclaimerBanner({ compact, headerSlot }: Props) {
 
   const iconButton = (
     <Pressable
-      onPress={() => setExpanded((v) => !v)}
+      onPress={() => {
+        hapticSelection();
+        setExpanded((v) => !v);
+      }}
       hitSlop={10}
       accessibilityRole="button"
       accessibilityLabel="Spiritual encouragement disclaimer"

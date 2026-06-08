@@ -5,10 +5,20 @@ import type { PurchaseEntitlement, PurchaseOfferings, PurchasePackage } from './
 
 const ENTITLEMENT_KEY = 'bibleadvice.subscription.mockEntitlement';
 
+/**
+ * The mock persists a fake entitlement to AsyncStorage. Scope it to the signed-in
+ * user so a purchase by one account doesn't leak to another on the same device.
+ */
+let currentUserId: string | null = null;
+
+function entitlementKey(): string {
+  return currentUserId ? `${ENTITLEMENT_KEY}.${currentUserId}` : ENTITLEMENT_KEY;
+}
+
 export const MOCK_MONTHLY_PACKAGE: PurchasePackage = {
   identifier: 'rioba_premium_monthly',
   title: 'Rioba Premium',
-  priceString: '$4.99/month',
+  priceString: '$6.99/month',
   billingPeriod: 'monthly',
   trialDays: PREMIUM_TRIAL_DAYS,
 };
@@ -19,12 +29,12 @@ const EMPTY_ENTITLEMENT: PurchaseEntitlement = {
 };
 
 async function readEntitlement(): Promise<PurchaseEntitlement> {
-  const raw = await AsyncStorage.getItem(ENTITLEMENT_KEY);
+  const raw = await AsyncStorage.getItem(entitlementKey());
   if (!raw) return EMPTY_ENTITLEMENT;
   try {
     const parsed = JSON.parse(raw) as PurchaseEntitlement;
     if (parsed.expiresAt && parsed.expiresAt < Date.now()) {
-      await AsyncStorage.removeItem(ENTITLEMENT_KEY);
+      await AsyncStorage.removeItem(entitlementKey());
       return EMPTY_ENTITLEMENT;
     }
     return parsed;
@@ -34,7 +44,7 @@ async function readEntitlement(): Promise<PurchaseEntitlement> {
 }
 
 async function writeEntitlement(entitlement: PurchaseEntitlement): Promise<void> {
-  await AsyncStorage.setItem(ENTITLEMENT_KEY, JSON.stringify(entitlement));
+  await AsyncStorage.setItem(entitlementKey(), JSON.stringify(entitlement));
 }
 
 /** In-memory mock for Expo Go and development (no native billing module). */
@@ -61,5 +71,13 @@ export const mockPurchaseService: PurchaseService = {
 
   async getEntitlement(): Promise<PurchaseEntitlement> {
     return readEntitlement();
+  },
+
+  async logIn(userId: string): Promise<void> {
+    currentUserId = userId;
+  },
+
+  async logOut(): Promise<void> {
+    currentUserId = null;
   },
 };
