@@ -1,47 +1,22 @@
-# Rioba website (Privacy & Support)
+# Rioba website
 
-Static pages for GitHub and [Vercel](https://vercel.com) hosting — used for App Store / Play Store links and public legal support URLs.
+| Domain | Page |
+|--------|------|
+| **https://www.riobabible.co** | Signup landing page (`index.html`) |
+| **https://riobabible.co/privacy** | Privacy policy (`privacy.html`) |
 
-## Pages
-
-| URL | File |
-|-----|------|
-| `/` | `index.html` |
-| `/privacy` | `privacy.html` |
-| `/support` | `support.html` |
-| `/signup` | `signup.html` — email capture landing page (connects to n8n webhook; see `docs/N8N_SIGNUP_WORKFLOW.md`) |
-
-**Support email:** [riobabible@gmail.com](mailto:riobabible@gmail.com) (also set in `src/constants/app.ts` for the mobile app).
+`riobabible.co` (apex) redirects `/` → `www.riobabible.co`. Privacy lives on the apex domain only.
 
 ## Deploy to Vercel
 
-### Option A — Deploy only this folder
+1. Import `eolorunnisola/riobabible` on [Vercel](https://vercel.com/new)
+2. Set **Root Directory** to `website`
+3. Framework: **Other**, no build command, output `.`
+4. Add both domains; set **www.riobabible.co** as the production domain for the signup page
+5. DNS: **A** `@` → `76.76.21.21`, **CNAME** `www` → `cname.vercel-dns.com`
+6. If using Cloudflare, set records to **DNS only** (grey cloud)
 
-1. Push this repo to GitHub.
-2. In [Vercel](https://vercel.com/new), import the repository.
-3. Set **Root Directory** to `website`.
-4. Leave **Build Command** empty and **Output Directory** as `.` (static files).
-5. Deploy.
-
-Your site will be live at `https://your-project.vercel.app/privacy` and `/support`.
-
-### Option B — Vercel CLI
-
-```bash
-cd website
-npx vercel
-```
-
-Follow prompts to link the project. Use `npx vercel --prod` for production.
-
-## Custom domain
-
-In the Vercel project → **Settings → Domains**, add e.g. `rioba.app` or `www.rioba.app`, then use:
-
-- `https://yourdomain.com/privacy`
-- `https://yourdomain.com/support`
-
-in App Store Connect and Google Play listing fields.
+Signup form POSTs to n8n — see `docs/N8N_SIGNUP_WORKFLOW.md`. CORS must allow `https://www.riobabible.co`.
 
 ## Local preview
 
@@ -50,15 +25,4 @@ cd website
 npm start
 ```
 
-Open:
-
-- http://localhost:4321/signup.html
-- http://localhost:4321/privacy.html
-- http://localhost:4321/support.html
-
-Or without npm:
-
-```bash
-cd website
-python3 -m http.server 4321
-```
+Open http://localhost:4321/

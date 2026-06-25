@@ -3,49 +3,77 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rioba — Legal &amp; Support</title>
-    <meta name="description" content="Privacy policy and support for Rioba, a Scripture-centered guidance app." />
-    <link rel="stylesheet" href="/styles.css" />
+    <title>Rioba — Get the app</title>
+    <meta
+      name="description"
+      content="Sign up for Rioba — gentle, Scripture-centered guidance for everyday life."
+    />
+    <link rel="canonical" href="https://www.riobabible.co" />
+    <link rel="stylesheet" href="/signup.css" />
+    <script>window.RIOBA_SIGNUP_WEBHOOK = 'https://emmanuelo.app.n8n.cloud/webhook/rioba-signup';</script>
   </head>
   <body>
-    <header class="site-header">
-      <div class="site-header-inner">
-        <a class="brand" href="/">Rioba</a>
-        <nav class="nav-links" aria-label="Site">
-          <a href="/privacy">Privacy</a>
-          <a href="/support">Support</a>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <h1>Rioba</h1>
-      <p class="lead">Scripture-centered guidance for everyday life.</p>
-      <p class="meta">Legal and support information for the Rioba mobile app.</p>
-
-      <div class="home-links">
-        <a class="home-link-card" href="/signup">
-          <h2>Get the app</h2>
-          <p>Sign up with your email to receive the download link.</p>
-        </a>
-        <a class="home-link-card" href="/privacy">
-          <h2>Privacy Policy</h2>
-          <p>What we collect, how we use your data, and your choices.</p>
-        </a>
-        <a class="home-link-card" href="/support">
-          <h2>Support</h2>
-          <p>FAQs, account help, subscriptions, and how to reach us.</p>
-        </a>
+    <main class="signup-page">
+      <div class="hero-visual" aria-hidden="false">
+        <img
+          class="logo"
+          src="/assets/logo.jpg"
+          width="80"
+          height="80"
+          alt="Rioba"
+        />
+        <div class="scripture-rotator" aria-live="polite" aria-atomic="true">
+          <p class="scripture active"></p>
+          <p class="scripture"></p>
+        </div>
       </div>
 
-      <div class="contact-card">
-        <p style="margin-bottom: 0.5rem">Questions?</p>
-        <a class="email" href="mailto:riobabible@gmail.com">riobabible@gmail.com</a>
+      <div class="signup-card" id="form-panel">
+        <h1>Welcome to Rioba</h1>
+        <p class="lead">
+          Gentle, Scripture-centered guidance for what you&rsquo;re carrying. Enter your email and
+          we&rsquo;ll send you the link to download the app.
+        </p>
+        <form class="signup-form" id="signup-form" novalidate>
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+          <p class="form-error" id="form-error" role="alert"></p>
+          <button class="submit-btn" type="submit" id="submit-btn">Get the app link</button>
+        </form>
+      </div>
+
+      <div class="thank-you-card hidden" id="thank-panel" aria-hidden="true">
+        <div class="check" aria-hidden="true">✓</div>
+        <h1>Thank you</h1>
+        <p class="lead">
+          You&rsquo;re on the list. We&rsquo;ll send the App Store link to your email shortly so you
+          can start your journey with Rioba.
+        </p>
+        <div class="spam-callout" role="note">
+          <p class="spam-callout__title">Check your spam folder</p>
+          <p class="spam-callout__text">
+            Our download link email often lands in <strong>spam</strong> or
+            <strong>promotions</strong>. If you don&rsquo;t see it within a few minutes, look there
+            first before contacting us.
+          </p>
+        </div>
+        <p class="note">
+          Still need help? Email
+          <a href="mailto:riobabible@gmail.com">riobabible@gmail.com</a>.
+        </p>
       </div>
     </main>
-
     <footer class="site-footer">
-      <p>&copy; 2026 Rioba · <a href="/privacy">Privacy</a> · <a href="/support">Support</a></p>
+      <a href="https://riobabible.co/privacy">Privacy Policy</a>
     </footer>
+    <script src="/signup.js" defer></script>
   </body>
 </html>

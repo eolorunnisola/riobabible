@@ -15,7 +15,7 @@ npm start
 
 **Firebase (auth + cloud sync):** [docs/FIREBASE.md](docs/FIREBASE.md) — project `riobabible`, deploy rules with `npm run firebase:deploy`.
 
-**Public web pages (Privacy & Support):** [website/](website/) — deploy the `website/` folder to Vercel for store listing URLs.
+**Public signup page:** [website/](website/) — `https://www.riobabible.co` (privacy at `https://riobabible.co/privacy`).
 
 Press `i` for iOS Simulator or `a` for Android emulator.
 

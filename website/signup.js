@@ -1,4 +1,4 @@
-/** n8n webhook URL — set in signup.html via window.RIOBA_SIGNUP_WEBHOOK, or here directly. */
+/** n8n webhook URL — set in index.html via window.RIOBA_SIGNUP_WEBHOOK, or here directly. */
 const SIGNUP_ENDPOINT =
   (typeof window !== 'undefined' && window.RIOBA_SIGNUP_WEBHOOK) || '';
 

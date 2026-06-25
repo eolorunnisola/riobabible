@@ -7,7 +7,7 @@ When someone submits their email on **`/signup`**, this workflow receives the ad
 ## Architecture
 
 ```
-signup.html  --POST JSON-->  n8n Webhook  -->  Gmail (OAuth)  -->  Respond 200
+signup page  --POST JSON-->  n8n Webhook  -->  Gmail (OAuth)  -->  Respond 200
                               { email, source }
 ```
 
@@ -69,14 +69,14 @@ Redeploy the `website` folder to Vercel.
 
 ## 5. CORS (required for browser form)
 
-Your signup page is on Vercel; n8n is on another domain. The browser will block the request unless n8n allows your site origin.
+Your signup page is on **https://www.riobabible.co**; n8n is on another domain. The browser will block the request unless n8n allows your site origin.
 
 **Option A — n8n Webhook options (recommended)**  
 On the **Webhook** node → **Options** → **Response Headers**, add:
 
 | Name | Value |
 |------|--------|
-| `Access-Control-Allow-Origin` | `https://yourdomain.com` (or `*` for testing only) |
+| `Access-Control-Allow-Origin` | `https://www.riobabible.co` |
 | `Access-Control-Allow-Methods` | `POST, OPTIONS` |
 | `Access-Control-Allow-Headers` | `Content-Type` |
 
@@ -100,7 +100,7 @@ curl -X POST 'https://YOUR-N8N/webhook-test/rioba-signup' \
 ```
 
 3. Check your inbox for the welcome email
-4. Submit the form on `https://yourdomain.com/signup.html`
+4. Submit the form on https://www.riobabible.co
 
 ---
 
