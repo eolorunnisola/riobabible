@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/favicon.ico",
+      "destination": "/assets/logo.jpg",
+      "permanent": false
+    },
+    {
       "source": "/",
       "has": [{ "type": "host", "value": "riobabible.co" }],
       "destination": "https://www.riobabible.co/",
