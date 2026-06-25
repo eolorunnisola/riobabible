@@ -3,9 +3,9 @@
 | Domain | Page |
 |--------|------|
 | **https://www.riobabible.co** | Signup landing page (`index.html`) |
-| **https://riobabible.co/privacy** | Privacy policy (`privacy.html`) |
+| **https://www.riobabible.co/privacy** | Privacy policy (`privacy.html`) |
 
-`riobabible.co` (apex) redirects `/` → `www.riobabible.co`. Privacy lives on the apex domain only.
+`riobabible.co` redirects to `www` for both `/` and `/privacy`.
 
 ## Deploy to Vercel
 
