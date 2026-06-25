@@ -3,9 +3,9 @@
 | Domain | Page |
 |--------|------|
 | **https://www.riobabible.co** | App Store download landing page (`index.html`) |
-| **https://riobabible.co/privacy** | Privacy policy (`privacy.html`) |
+| **https://www.riobabible.co/privacy** | Privacy policy (`privacy.html`) |
 
-`www` serves only the download page. Privacy lives on the apex domain. The email signup page is kept as `signup.html` for n8n campaigns but is not routed on www.
+`riobabible.co` redirects to `www` for `/` and `/privacy`.
 
 ## Deploy to Vercel
 

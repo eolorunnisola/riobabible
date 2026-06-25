@@ -205,26 +205,6 @@ a.store-btn {
   line-height: 1.25;
 }
 
-.store-alt {
-  margin: 1rem 0 0;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
-.store-alt a {
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(95, 114, 104, 0.35);
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.store-alt a:hover {
-  color: var(--accent-hover);
-  border-bottom-color: var(--accent-hover);
-}
-
 .hidden {
   display: none !important;
 }

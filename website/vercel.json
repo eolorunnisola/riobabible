@@ -8,14 +8,14 @@
     },
     {
       "source": "/privacy",
-      "has": [{ "type": "host", "value": "www.riobabible.co" }],
-      "destination": "https://riobabible.co/privacy",
+      "has": [{ "type": "host", "value": "riobabible.co" }],
+      "destination": "https://www.riobabible.co/privacy",
       "permanent": true
     },
     {
       "source": "/privacy.html",
-      "has": [{ "type": "host", "value": "www.riobabible.co" }],
-      "destination": "https://riobabible.co/privacy",
+      "has": [{ "type": "host", "value": "riobabible.co" }],
+      "destination": "https://www.riobabible.co/privacy",
       "permanent": true
     },
     {
@@ -44,7 +44,6 @@
     },
     {
       "source": "/privacy.html",
-      "has": [{ "type": "host", "value": "riobabible.co" }],
       "destination": "/privacy",
       "permanent": true
     },
@@ -59,11 +58,5 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    {
-      "source": "/privacy",
-      "has": [{ "type": "host", "value": "riobabible.co" }],
-      "destination": "/privacy.html"
-    }
-  ]
+  "rewrites": [{ "source": "/privacy", "destination": "/privacy.html" }]
 }

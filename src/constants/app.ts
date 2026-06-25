@@ -11,5 +11,5 @@ export const APP_STORE_URL = 'https://apps.apple.com/app/id6775082834';
 export const PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.rioba.app';
 
-/** Privacy policy on apex domain */
-export const PRIVACY_URL = 'https://riobabible.co/privacy';
+/** Privacy policy (same site as download page) */
+export const PRIVACY_URL = `${WEBSITE_URL}/privacy`;
