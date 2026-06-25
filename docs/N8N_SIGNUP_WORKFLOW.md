@@ -57,13 +57,17 @@ Find the iOS link in App Store Connect → your app → **View on App Store** (a
 
 ## 4. Connect the signup page
 
-In `website/signup.js`, set:
+The signup form posts to **`/api/signup`** on your domain (a Vercel serverless proxy). This avoids browser CORS issues when calling n8n directly.
 
-```javascript
-const SIGNUP_ENDPOINT = 'https://YOUR-N8N-DOMAIN/webhook/rioba-signup';
+In **Vercel → Project → Settings → Environment Variables**, add:
+
+```
+N8N_SIGNUP_WEBHOOK=https://YOUR-N8N-DOMAIN/webhook/rioba-signup
 ```
 
-Redeploy the `website` folder to Vercel.
+Redeploy after adding the variable.
+
+**Optional — direct n8n call (not recommended):** set `window.RIOBA_SIGNUP_WEBHOOK` in `index.html` and ensure n8n CORS allows `https://www.riobabible.co` on **both** OPTIONS and POST responses.
 
 ---
 

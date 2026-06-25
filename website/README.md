@@ -16,7 +16,13 @@
 5. DNS: **A** `@` → `76.76.21.21`, **CNAME** `www` → `cname.vercel-dns.com`
 6. If using Cloudflare, set records to **DNS only** (grey cloud)
 
-Signup form POSTs to n8n — see `docs/N8N_SIGNUP_WORKFLOW.md`. CORS must allow `https://www.riobabible.co`.
+Signup form POSTs to `/api/signup` (Vercel proxy → n8n). Set **`N8N_SIGNUP_WEBHOOK`** in Vercel project env:
+
+```
+N8N_SIGNUP_WEBHOOK=https://emmanuelo.app.n8n.cloud/webhook/rioba-signup
+```
+
+See `docs/N8N_SIGNUP_WORKFLOW.md` for the full n8n setup.
 
 ## Local preview
 

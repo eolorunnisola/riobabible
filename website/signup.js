@@ -1,6 +1,6 @@
-/** n8n webhook URL — set in index.html via window.RIOBA_SIGNUP_WEBHOOK, or here directly. */
+/** Post to same-origin proxy (see website/api/signup.js) unless overridden. */
 const SIGNUP_ENDPOINT =
-  (typeof window !== 'undefined' && window.RIOBA_SIGNUP_WEBHOOK) || '';
+  (typeof window !== 'undefined' && window.RIOBA_SIGNUP_WEBHOOK) || '/api/signup';
 
 const SCRIPTURES = [
   {
