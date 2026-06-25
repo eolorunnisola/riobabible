@@ -3,13 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rioba — Get the app</title>
+    <title>Rioba — Download the app</title>
     <meta
       name="description"
-      content="Sign up for Rioba — gentle, Scripture-centered guidance for everyday life."
+      content="Download Rioba — gentle, Scripture-centered guidance for everyday life."
     />
     <link rel="canonical" href="https://www.riobabible.co" />
-    <link rel="icon" href="/assets/logo.jpg" type="image/jpeg" />
     <link rel="stylesheet" href="/signup.css" />
   </head>
   <body>
@@ -28,59 +27,35 @@
         </div>
       </div>
 
-      <div class="signup-card" id="form-panel">
+      <div class="signup-card">
         <h1>Welcome to Rioba</h1>
         <p class="lead">
-          Gentle, Scripture-centered guidance for what you&rsquo;re carrying. Enter your email and
-          we&rsquo;ll send you the link to download the app.
+          Gentle, Scripture-centered guidance for what you&rsquo;re carrying. Download the app and
+          start your journey today.
         </p>
-        <form class="signup-form" id="signup-form" novalidate>
-          <label for="email">Email address</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            inputmode="email"
-            autocomplete="email"
-            placeholder="you@example.com"
-            required
-          />
-          <p class="form-error" id="form-error" role="alert"></p>
-          <button class="submit-btn" type="submit" id="submit-btn">Get the app link</button>
-        </form>
+        <a
+          class="submit-btn store-btn"
+          href="https://apps.apple.com/app/id6775082834"
+          rel="noopener noreferrer"
+        >
+          Download on the App Store
+        </a>
+        <p class="store-alt">
+          Android:
+          <a
+            href="https://play.google.com/store/apps/details?id=com.rioba.app"
+            rel="noopener noreferrer"
+          >Google Play</a>
+        </p>
         <p class="legal-note">
-          By signing up, you agree to our
-          <a href="/privacy">Privacy Policy</a>.
-        </p>
-      </div>
-
-      <div class="thank-you-card hidden" id="thank-panel" aria-hidden="true">
-        <div class="check" aria-hidden="true">✓</div>
-        <h1>Thank you</h1>
-        <p class="lead">
-          You&rsquo;re on the list. We&rsquo;ll send the App Store link to your email shortly so you
-          can start your journey with Rioba.
-        </p>
-        <div class="spam-callout" role="note">
-          <p class="spam-callout__title">Check your spam folder</p>
-          <p class="spam-callout__text">
-            Our download link email often lands in <strong>spam</strong> or
-            <strong>promotions</strong>. If you don&rsquo;t see it within a few minutes, look there
-            first before contacting us.
-          </p>
-        </div>
-        <p class="note">
-          Still need help? Email
-          <a href="mailto:riobabible@gmail.com">riobabible@gmail.com</a>.
-        </p>
-        <p class="legal-note legal-note--centered">
-          <a href="/privacy">Privacy Policy</a>
+          By downloading, you agree to our
+          <a href="https://riobabible.co/privacy">Privacy Policy</a>.
         </p>
       </div>
     </main>
     <footer class="site-footer">
       <p>&copy; 2026 Rioba</p>
     </footer>
-    <script src="/signup.js" defer></script>
+    <script src="/landing.js" defer></script>
   </body>
 </html>

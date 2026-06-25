@@ -1,11 +1,6 @@
 {
   "redirects": [
     {
-      "source": "/favicon.ico",
-      "destination": "/assets/logo.jpg",
-      "permanent": false
-    },
-    {
       "source": "/",
       "has": [{ "type": "host", "value": "riobabible.co" }],
       "destination": "https://www.riobabible.co/",
@@ -13,14 +8,26 @@
     },
     {
       "source": "/privacy",
-      "has": [{ "type": "host", "value": "riobabible.co" }],
-      "destination": "https://www.riobabible.co/privacy",
+      "has": [{ "type": "host", "value": "www.riobabible.co" }],
+      "destination": "https://riobabible.co/privacy",
       "permanent": true
     },
     {
       "source": "/privacy.html",
-      "has": [{ "type": "host", "value": "riobabible.co" }],
-      "destination": "https://www.riobabible.co/privacy",
+      "has": [{ "type": "host", "value": "www.riobabible.co" }],
+      "destination": "https://riobabible.co/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/signup",
+      "has": [{ "type": "host", "value": "www.riobabible.co" }],
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/signup.html",
+      "has": [{ "type": "host", "value": "www.riobabible.co" }],
+      "destination": "/",
       "permanent": true
     },
     {
@@ -36,30 +43,27 @@
       "permanent": true
     },
     {
-      "source": "/signup",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/signup.html",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/privacy.html",
+      "has": [{ "type": "host", "value": "riobabible.co" }],
       "destination": "/privacy",
       "permanent": true
     },
     {
       "source": "/support",
-      "destination": "/",
+      "destination": "https://www.riobabible.co/",
       "permanent": true
     },
     {
       "source": "/support.html",
-      "destination": "/",
+      "destination": "https://www.riobabible.co/",
       "permanent": true
     }
   ],
-  "rewrites": [{ "source": "/privacy", "destination": "/privacy.html" }]
+  "rewrites": [
+    {
+      "source": "/privacy",
+      "has": [{ "type": "host", "value": "riobabible.co" }],
+      "destination": "/privacy.html"
+    }
+  ]
 }

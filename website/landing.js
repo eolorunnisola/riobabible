@@ -1,7 +1,3 @@
-/** n8n webhook URL — set in index.html via window.RIOBA_SIGNUP_WEBHOOK, or here directly. */
-const SIGNUP_ENDPOINT =
-  (typeof window !== 'undefined' && window.RIOBA_SIGNUP_WEBHOOK) || '';
-
 const SCRIPTURES = [
   {
     text: 'Come to me, all you who are weary and burdened, and I will give you rest.',
@@ -51,7 +47,6 @@ function scriptureHtml(item) {
   return `${item.text}<span class="scripture-ref">${item.ref}</span>`;
 }
 
-/** Reserve enough height for the longest verse so text never overlaps the card below. */
 function sizeScriptureRotator(rotator) {
   const width = rotator.clientWidth;
   if (!width) return;
@@ -114,68 +109,4 @@ function initScriptureRotator() {
   }, ROTATE_MS);
 }
 
-function isValidEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-async function submitSignup(email) {
-  if (SIGNUP_ENDPOINT) {
-    const res = await fetch(SIGNUP_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ email, source: 'rioba-signup' }),
-    });
-    if (!res.ok) throw new Error('Signup failed');
-    return;
-  }
-  await new Promise((r) => setTimeout(r, 400));
-}
-
-function initForm() {
-  const form = document.getElementById('signup-form');
-  const formPanel = document.getElementById('form-panel');
-  const thankPanel = document.getElementById('thank-panel');
-  const emailInput = document.getElementById('email');
-  const errorEl = document.getElementById('form-error');
-  const submitBtn = document.getElementById('submit-btn');
-
-  if (!form || !formPanel || !thankPanel || !emailInput) return;
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = emailInput.value.trim();
-    errorEl.textContent = '';
-
-    if (!isValidEmail(email)) {
-      emailInput.classList.add('invalid');
-      errorEl.textContent = 'Please enter a valid email address.';
-      emailInput.focus();
-      return;
-    }
-
-    emailInput.classList.remove('invalid');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting…';
-
-    try {
-      await submitSignup(email);
-      formPanel.classList.add('hidden');
-      thankPanel.classList.remove('hidden');
-      thankPanel.setAttribute('aria-hidden', 'false');
-    } catch {
-      errorEl.textContent = 'Something went wrong. Please try again.';
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Get the app link';
-    }
-  });
-
-  emailInput.addEventListener('input', () => {
-    emailInput.classList.remove('invalid');
-    errorEl.textContent = '';
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  initScriptureRotator();
-  initForm();
-});
+document.addEventListener('DOMContentLoaded', initScriptureRotator);

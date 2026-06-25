@@ -86,7 +86,7 @@ eas submit --profile production --platform android    # uploads to Play Console
 
 Before submitting, complete in each console:
 - [ ] App name, description, keywords, category, screenshots (6.7" + 5.5" iPhone, etc.), app icon.
-- [ ] **Privacy policy URL** — `https://www.riobabible.co/privacy`
+- [ ] **Privacy policy URL** — `https://riobabible.co/privacy`
 - [ ] App Privacy questionnaire (iOS) / Data safety form (Android) — declare Firebase auth/data + Gemini usage.
 - [ ] iOS: App Review notes with sandbox login + how to reach the paywall.
 - [ ] Bump `ios.buildNumber` / `android.versionCode` for each new upload (production profile `autoIncrement` handles this on EAS).
