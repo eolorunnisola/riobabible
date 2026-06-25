@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rioba — Get the app</title>
+    <meta
+      name="description"
+      content="Sign up for Rioba — gentle, Scripture-centered guidance for everyday life."
+    />
+    <link rel="stylesheet" href="/signup.css" />
+    <!-- Set your n8n production webhook URL here after activating the workflow -->
+    <script>window.RIOBA_SIGNUP_WEBHOOK = 'https://emmanuelo.app.n8n.cloud/webhook/rioba-signup';</script>
+  </head>
+  <body>
+    <main class="signup-page">
+      <div class="hero-visual" aria-hidden="false">
+        <img
+          class="logo"
+          src="/assets/logo.jpg"
+          width="80"
+          height="80"
+          alt="Rioba"
+        />
+        <div class="scripture-rotator" aria-live="polite" aria-atomic="true">
+          <p class="scripture active"></p>
+          <p class="scripture"></p>
+        </div>
+      </div>
+
+      <div class="signup-card" id="form-panel">
+        <h1>Welcome to Rioba</h1>
+        <p class="lead">
+          Gentle, Scripture-centered guidance for what you&rsquo;re carrying. Enter your email and
+          we&rsquo;ll send you the link to download the app.
+        </p>
+        <form class="signup-form" id="signup-form" novalidate>
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required
+          />
+          <p class="form-error" id="form-error" role="alert"></p>
+          <button class="submit-btn" type="submit" id="submit-btn">Get the app link</button>
+        </form>
+      </div>
+
+      <div class="thank-you-card hidden" id="thank-panel" aria-hidden="true">
+        <div class="check" aria-hidden="true">✓</div>
+        <h1>Thank you</h1>
+        <p class="lead">
+          You&rsquo;re on the list. We&rsquo;ll send the App Store link to your email shortly so you
+          can start your journey with Rioba.
+        </p>
+        <div class="spam-callout" role="note">
+          <p class="spam-callout__title">Check your spam folder</p>
+          <p class="spam-callout__text">
+            Our download link email often lands in <strong>spam</strong> or
+            <strong>promotions</strong>. If you don&rsquo;t see it within a few minutes, look there
+            first before contacting us.
+          </p>
+        </div>
+        <p class="note">
+          Still need help? Email
+          <a href="mailto:riobabible@gmail.com">riobabible@gmail.com</a>.
+        </p>
+      </div>
+    </main>
+    <script src="/signup.js" defer></script>
+  </body>
+</html>

@@ -9,6 +9,7 @@ Static pages for GitHub and [Vercel](https://vercel.com) hosting — used for Ap
 | `/` | `index.html` |
 | `/privacy` | `privacy.html` |
 | `/support` | `support.html` |
+| `/signup` | `signup.html` — email capture landing page (connects to n8n webhook; see `docs/N8N_SIGNUP_WORKFLOW.md`) |
 
 **Support email:** [riobabible@gmail.com](mailto:riobabible@gmail.com) (also set in `src/constants/app.ts` for the mobile app).
 
@@ -46,7 +47,18 @@ in App Store Connect and Google Play listing fields.
 
 ```bash
 cd website
-npx serve .
+npm start
 ```
 
-Open `http://localhost:3000/privacy` and `/support`.
+Open:
+
+- http://localhost:4321/signup.html
+- http://localhost:4321/privacy.html
+- http://localhost:4321/support.html
+
+Or without npm:
+
+```bash
+cd website
+python3 -m http.server 4321
+```
